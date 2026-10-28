@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GameAI</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        <span>🎮</span>
+        <strong>GameAI</strong>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Discover</a>
+
+        {% if username %}
+            <a href="/wishlist">❤️ Wishlist</a>
+            <a href="/profile">👤 Profile</a>
+
+            <a href="/logout" class="logout-btn">
+                Logout
+            </a>
+        {% else %}
+
+            <a href="/login">
+                Login
+            </a>
+
+            <a href="/register" class="signup-btn">
+                Create Account
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="ai-badge">
+            ✨ AI-POWERED DISCOVERY
+        </div>
+
+        <h1>
+            Find Your Next
+            <span>Favorite Game.</span>
+        </h1>
+
+        <p>
+            Discover games you'll love using intelligent
+            recommendations powered by machine learning.
+        </p>
+
+
+        {% if username %}
+
+        <div class="welcome-user">
+            Welcome back, <strong>{{ username }}</strong> 👋
+        </div>
+
+        {% endif %}
+
+
+        <!-- SEARCH -->
+
+        <div class="search-wrapper">
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    id="gameName"
+                    placeholder="Search for a game..."
+                    autocomplete="off"
+                    oninput="searchGames()"
+                    onkeydown="handleEnter(event)"
+                >
+
+                <button onclick="getRecommendations()">
+                    <span>Recommend</span>
+                    <span>→</span>
+                </button>
+
+            </div>
+
+            <div id="suggestions"></div>
+
+        </div>
+
+
+        <div class="search-hint">
+            Try searching for Minecraft, Counter-Strike, GTA, or any game you love
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features-section">
+
+    <div class="section-heading">
+
+        <span>WHY GAMEAI?</span>
+
+        <h2>
+            Smarter way to discover games
+        </h2>
+
+    </div>
+
+
+    <div class="features">
+
+        <div class="feature-card">
+
+            <div class="feature-icon purple">
+                🤖
+            </div>
+
+            <h3>AI Recommendations</h3>
+
+            <p>
+                Find games similar to your favorites
+                using intelligent machine learning.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon blue">
+                🎯
+            </div>
+
+            <h3>Smart Discovery</h3>
+
+            <p>
+                Explore new games based on similarity,
+                ratings and player feedback.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon pink">
+                ❤️
+            </div>
+
+            <h3>Your Wishlist</h3>
+
+            <p>
+                Save games you love and keep your
+                personal collection organized.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RECOMMENDATIONS -->
+
+<section id="recommendation-section">
+
+    <p id="loading"></p>
+
+    <div id="result"></div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-logo">
+        🎮 GameAI
+    </div>
+
+    <p>
+        Discover. Explore. Play.
+    </p>
+
+    <div class="footer-line"></div>
+
+    <p class="copyright">
+        AI-powered game recommendations
+    </p>
+
+</footer>
+
+
+<script>
+
+let searchTimeout;
+
+
+/* SEARCH SUGGESTIONS */
+
+async function searchGames() {
+
+    const game =
+        document
+        .getElementById("gameName")
+        .value
+        .trim();
+
+    const suggestions =
+        document.getElementById("suggestions");
+
+
+    if (game.length < 2) {
+
+        suggestions.innerHTML = "";
+
+        return;
+    }
+
+
+    clearTimeout(searchTimeout);
+
+
+    searchTimeout = setTimeout(async function() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/search/" +
+                    encodeURIComponent(game)
+                );
+
+
+            const data =
+                await response.json();
+
+
+            suggestions.innerHTML = "";
+
+
+            data.results.forEach(function(title) {
+
+                const item =
+                    document.createElement("div");
+
+
+                item.className =
+                    "suggestion";
+
+
+                item.innerHTML =
+                    `
+                    <span class="suggestion-icon">🎮</span>
+                    <span>${title}</span>
+                    `;
+
+
+                item.onclick = function() {
+
+                    document
+                        .getElementById("gameName")
+                        .value = title;
+
+
+                    suggestions.innerHTML = "";
+
+                };
+
+
+                suggestions.appendChild(item);
+
+            });
+
+
+        } catch (error) {
+
+            suggestions.innerHTML = "";
+
+        }
+
+    }, 300);
+
+}
+
+
+/* ENTER KEY */
+
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+
+        getRecommendations();
+
+    }
+
+}
+
+
+/* RECOMMENDATIONS */
+
+async function getRecommendations() {
+
+    const game =
+        document
+        .getElementById("gameName")
+        .value
+        .trim();
+
+
+    const result =
+        document.getElementById("result");
+
+
+    const loading =
+        document.getElementById("loading");
+
+
+    result.innerHTML = "";
+
+
+    if (!game) {
+
+        result.innerHTML =
+            `
+            <div class="error-box">
+                ⚠️ Please enter a game name.
+            </div>
+            `;
+
+        return;
+    }
+
+
+    loading.innerHTML =
+        `
+        <div class="loading-box">
+
+            <div class="spinner"></div>
+
+            <span>
+                AI is finding games for you...
+            </span>
+
+        </div>
+        `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/recommend/" +
+                encodeURIComponent(game)
+            );
+
+
+        const data =
+            await response.json();
+
+
+        loading.innerHTML = "";
+
+
+        if (data.message) {
+
+            result.innerHTML =
+                `
+                <div class="error-box">
+                    ⚠️ ${data.message}
+                </div>
+                `;
+
+            return;
+        }
+
+
+        let html =
+
+            `
+            <div class="results-header">
+
+                <div>
+
+                    <span class="results-label">
+                        AI PICKS FOR YOU
+                    </span>
+
+                    <h2>
+                        Recommended Games
+                    </h2>
+
+                </div>
+
+                <div class="result-count">
+                    ${data.recommendations.length} games
+                </div>
+
+            </div>
+
+            <div class="game-grid">
+            `;
+
+
+        data.recommendations.forEach(
+            function(game) {
+
+
+                html +=
+
+                `
+                <div class="game-card">
+
+                    <div class="game-cover">
+
+                        <span>
+                            🎮
+                        </span>
+
+                        <div class="match-badge">
+                            AI MATCH
+                        </div>
+
+                    </div>
+
+
+                    <div class="game-content">
+
+                        <h3>
+                            ${game.title}
+                        </h3>
+
+
+                        <div class="rating">
+
+                            <span>⭐</span>
+
+                            <strong>
+                                ${game.rating}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="stats">
+
+                            <div>
+                                <span>👍</span>
+                                <strong>
+                                    ${game.positive_ratio}%
+                                </strong>
+                                <small>
+                                    Positive
+                                </small>
+                            </div>
+
+
+                            <div>
+                                <span>👥</span>
+                                <strong>
+                                    ${game.user_reviews}
+                                </strong>
+                                <small>
+                                    Reviews
+                                </small>
+                            </div>
+
+
+                            <div>
+                                <span>💰</span>
+                                <strong>
+                                    $${game.price}
+                                </strong>
+                                <small>
+                                    Price
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <form
+                            action="/wishlist/add"
+                            method="post"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="game_title"
+                                value="${game.title.replace(/"/g, '&quot;')}"
+                            >
+
+
+                            <button
+                                class="wishlist-button"
+                                type="submit"
+                            >
+
+                                ❤️
+                                Add to Wishlist
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+                `;
+
+            }
+        );
+
+
+        html +=
+            `
+            </div>
+            `;
+
+
+        result.innerHTML = html;
+
+
+        document
+            .getElementById("recommendation-section")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+
+    } catch (error) {
+
+        loading.innerHTML = "";
+
+
+        result.innerHTML =
+            `
+            <div class="error-box">
+
+                ❌ Something went wrong.
+                Please try again.
+
+            </div>
+            `;
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

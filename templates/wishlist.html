@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Wishlist</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>❤️ My Wishlist</h1>
+
+        <p>
+            <a href="/">Home</a>
+            |
+            <a href="/logout">Logout</a>
+        </p>
+
+        {% if wishlist %}
+
+        <div class="game-list">
+
+            {% for game in wishlist %}
+
+            <div class="game-card">
+
+                <h3>🎮 {{ game.game_title }}</h3>
+
+                <form
+                    action="/wishlist/remove/{{ game.id }}"
+                    method="post"
+                >
+
+                    <button type="submit">
+                        Remove
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>
+            Your wishlist is empty.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

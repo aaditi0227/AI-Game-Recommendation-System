@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>👑 Admin Dashboard</h1>
+
+        <p>
+            Welcome, <strong>{{ username }}</strong>!
+        </p>
+
+        <p>
+
+            <a href="/">🏠 Home</a>
+
+            |
+
+            <a href="/admin/add-game">➕ Add Game</a>
+
+            |
+
+            <a href="/logout">🚪 Logout</a>
+
+        </p>
+
+
+        <div class="game-list">
+
+            <div class="game-card">
+
+                <h2>👥 Users</h2>
+
+                <h1>{{ total_users }}</h1>
+
+                <p>
+                    Total registered users
+                </p>
+
+            </div>
+
+
+            <div class="game-card">
+
+                <h2>🎮 Games</h2>
+
+                <h1>{{ total_games }}</h1>
+
+                <p>
+                    Total games in database
+                </p>
+
+            </div>
+
+
+            <div class="game-card">
+
+                <h2>❤️ Wishlist</h2>
+
+                <h1>{{ total_wishlist }}</h1>
+
+                <p>
+                    Total wishlist items
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <h2>👥 Registered Users</h2>
+
+
+        {% if users %}
+
+        <div class="game-list">
+
+            {% for user in users %}
+
+<div class="game-card">
+
+    <h3>
+        👤 {{ user.username }}
+    </h3>
+
+    <p>
+        📧 {{ user.email }}
+    </p>
+
+    <p>
+
+        {% if user.is_admin %}
+
+        👑 Administrator
+
+        {% else %}
+
+        👤 Normal User
+
+        <form
+            action="/admin/delete-user/{{ user.id }}"
+            method="post"
+            onsubmit="return confirm('Are you sure you want to delete this user?');"
+        >
+
+            <button type="submit">
+                🗑️ Delete User
+            </button>
+
+        </form>
+
+        {% endif %}
+
+    </p>
+
+</div>
+
+{% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>
+            No users found.
+        </p>
+
+        {% endif %}
+
+
+        <h2>🎮 Games in Database</h2>
+
+
+        {% if games %}
+
+        <div class="game-list">
+
+            {% for game in games %}
+
+            <div class="game-card">
+
+                <h3>
+                    🎮 {{ game.title }}
+                </h3>
+
+                <p>
+                    ⭐ Rating: {{ game.rating }}
+                </p>
+
+                <p>
+                    👍 Positive: {{ game.positive_ratio }}%
+                </p>
+
+                <p>
+                    👥 Reviews: {{ game.user_reviews }}
+                </p>
+
+
+                <form
+                    action="/admin/delete-game/{{ game.id }}"
+                    method="post"
+                    onsubmit="return confirm('Are you sure you want to delete this game?');"
+                >
+
+                    <button type="submit">
+                        🗑️ Delete Game
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>
+            No games found.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - AI Game Recommendation System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🔐 Login</h1>
+
+        <p class="subtitle">
+            Login to your account
+        </p>
+
+        <form action="/login" method="post">
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Enter username"
+                required
+            >
+
+            <br><br>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required
+            >
+
+            <br><br>
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+        {% if message %}
+        <p class="error">
+            {{ message }}
+        </p>
+        {% endif %}
+
+        <p>
+            Don't have an account?
+            <a href="/register">Register</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

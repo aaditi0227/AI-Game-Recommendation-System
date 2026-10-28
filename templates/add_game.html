@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Add Game</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>➕ Add New Game</h1>
+
+        <p>
+            <a href="/admin">👑 Admin Dashboard</a>
+            |
+            <a href="/">🏠 Home</a>
+            |
+            <a href="/logout">🚪 Logout</a>
+        </p>
+
+
+        <form action="/admin/add-game" method="post">
+
+            <input
+                type="number"
+                name="app_id"
+                placeholder="App ID"
+                required
+            >
+
+            <br><br>
+
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Game Title"
+                required
+            >
+
+            <br><br>
+
+
+            <input
+                type="text"
+                name="date_release"
+                placeholder="Release Date"
+            >
+
+            <br><br>
+
+
+            <input
+                type="text"
+                name="rating"
+                placeholder="Rating"
+            >
+
+            <br><br>
+
+
+            <input
+                type="number"
+                name="positive_ratio"
+                placeholder="Positive Ratio"
+                min="0"
+                max="100"
+            >
+
+            <br><br>
+
+
+            <input
+                type="number"
+                name="user_reviews"
+                placeholder="Number of Reviews"
+                min="0"
+            >
+
+            <br><br>
+
+
+            <input
+                type="number"
+                step="0.01"
+                name="price_final"
+                placeholder="Final Price"
+                min="0"
+            >
+
+            <br><br>
+
+
+            <input
+                type="number"
+                step="0.01"
+                name="price_original"
+                placeholder="Original Price"
+                min="0"
+            >
+
+            <br><br>
+
+
+            <input
+                type="number"
+                step="0.01"
+                name="discount"
+                placeholder="Discount"
+                min="0"
+            >
+
+            <br><br>
+
+
+            <button type="submit">
+                ➕ Add Game
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

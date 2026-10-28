@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>👤 My Profile</h1>
+
+        <p>
+            <a href="/">🏠 Home</a>
+            |
+            <a href="/wishlist">❤️ Wishlist</a>
+            |
+            <a href="/logout">🚪 Logout</a>
+        </p>
+
+        <div class="game-card">
+
+            <h2>Account Information</h2>
+
+            <p>
+                <strong>Username:</strong>
+                {{ user.username }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ user.email }}
+            </p>
+
+            <p>
+                <strong>Wishlist Games:</strong>
+                {{ wishlist_count }}
+            </p>
+
+        </div>
+
+        <h2>My Wishlist</h2>
+
+        {% if wishlist %}
+
+        <div class="game-list">
+
+            {% for game in wishlist %}
+
+            <div class="game-card">
+
+                <h3>🎮 {{ game.game_title }}</h3>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>
+            You have not added any games to your wishlist yet.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
