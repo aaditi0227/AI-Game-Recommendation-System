@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pandas
+scikit-learn
+SQLAlchemy
+Jinja2
+python-multipart
+itsdangerous
