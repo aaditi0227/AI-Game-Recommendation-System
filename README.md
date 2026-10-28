@@ -1,51 +1,44 @@
-# AI Game Recommendation System 🎮
+# AI Game Recommendation System
 
-## Overview
-
-The **AI Game Recommendation System** is a Python-based web application that recommends similar games based on game titles, ratings, and positive review ratios. It uses Natural Language Processing (NLP) techniques and a content-based filtering approach to identify similarities between games and provide personalized discovery options.
-
-The application also includes user registration, login, game search, wishlist management, and an administrative interface.
+A Python web application that helps users discover games through content-based recommendations. It uses TF-IDF vectorization and cosine similarity to compare game attributes and return similar titles.
 
 ## Features
 
-- **Game Recommendations:** Recommends similar games using TF-IDF vectorization and cosine similarity.
-- **Game Search:** Search for games by title.
-- **User Authentication:** Register an account, log in, and log out.
-- **Wishlist Management:** Save and manage games of interest.
-- **Admin Interface:** Includes an administrative section for game management.
-- **Game Dataset:** Uses a dataset containing game information, ratings, reviews, and pricing.
-- **Web Interface:** Provides an interactive interface built with HTML, CSS, and Jinja2 templates.
+- Content-based game recommendations
+- Game search
+- User registration and login
+- Personal wishlist
+- Profile page
+- Admin dashboard and game management
+- HTML/CSS interface rendered with Jinja2 templates
 
-## Technologies Used
+## Tech Stack
 
-- **Programming Language:** Python
-- **Web Framework:** FastAPI
-- **Machine Learning / NLP:** Scikit-learn, TF-IDF, Cosine Similarity
-- **Data Processing:** Pandas
-- **Database:** SQLite, SQLAlchemy
-- **Frontend:** HTML, CSS, Jinja2 Templates
-- **Session Management:** Starlette Session Middleware
+- **Language:** Python
+- **Web framework:** FastAPI
+- **Data processing:** Pandas
+- **Recommendation algorithm:** Scikit-learn (TF-IDF and cosine similarity)
+- **Database:** SQLite with SQLAlchemy
+- **Templates:** Jinja2
+- **Frontend:** HTML and CSS
 
-## How It Works
+## How Recommendations Work
 
-1. The system loads game information from a CSV dataset.
-2. It preprocesses selected game attributes, including titles, ratings, and positive review ratios.
-3. TF-IDF converts the combined text features into numerical vectors.
-4. Cosine similarity calculates how closely games match one another.
-5. When a user selects a game, the system returns other games with the highest similarity scores.
+1. The application reads game information from `dataset/games_1000.csv`.
+2. It prepares features from each game's title, rating, and positive review ratio.
+3. TF-IDF converts those text features into numerical vectors.
+4. Cosine similarity compares the vectors.
+5. The system returns the five highest-ranked similar titles for a selected game.
 
 ## Project Structure
 
 ```text
 AI-Game-Recommendation-System/
-│
 ├── dataset/
 │   ├── games.csv
 │   └── games_1000.csv
-│
 ├── static/
 │   └── style.css
-│
 ├── templates/
 │   ├── index.html
 │   ├── login.html
@@ -54,7 +47,6 @@ AI-Game-Recommendation-System/
 │   ├── wishlist.html
 │   ├── admin.html
 │   └── add_game.html
-│
 ├── main.py
 ├── recommendation.py
 ├── database.py
@@ -62,10 +54,12 @@ AI-Game-Recommendation-System/
 ├── check_dataset.py
 ├── reduce_dataset.py
 ├── make_admin.py
-└── update_admin.py
+├── update_admin.py
+├── requirements.txt
+└── .gitignore
 ```
 
-## Installation and Setup
+## Getting Started
 
 ### Prerequisites
 
@@ -75,92 +69,56 @@ AI-Game-Recommendation-System/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
-```
-
-Replace the URL with your actual GitHub repository URL.
-
-### 2. Navigate to the project directory
-
-```bash
+git clone https://github.com/aaditi0227/AI-Game-Recommendation-System.git
 cd AI-Game-Recommendation-System
 ```
 
-### 3. Create a virtual environment
+### 2. Create and activate a virtual environment
+
+On Windows:
 
 ```bash
 python -m venv venv
+venv\\Scripts\\activate
 ```
 
-Activate it on Windows:
+On macOS/Linux:
 
 ```bash
-venv\Scripts\activate
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-### 4. Install the dependencies
+### 3. Install dependencies
 
 ```bash
-pip install fastapi uvicorn pandas scikit-learn sqlalchemy jinja2 python-multipart itsdangerous
+pip install -r requirements.txt
 ```
 
-### 5. Initialize the database
+### 4. Initialize the database and load games
 
 ```bash
 python database.py
-```
-
-### 6. Load the game dataset
-
-```bash
 python load_games.py
 ```
 
-Run the database initialization and data-loading steps only when setting up a fresh database, to avoid duplicate game records.
+Run the game-loading script only when populating a fresh database; running it repeatedly may add duplicate records.
 
-### 7. Start the application
+### 5. Run the web application
 
 ```bash
 uvicorn main:app --reload
 ```
 
-Open the following URL in your browser:
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
-`http://127.0.0.1:8000`
+## Notes
 
-## Recommendation Algorithm
-
-The project uses a content-based recommendation approach.
-
-- **TF-IDF Vectorization:** Converts selected game attributes into numerical feature vectors.
-- **Cosine Similarity:** Measures similarity between game vectors.
-- **Ranking:** Sorts games by similarity and returns the top matching recommendations.
-
-This approach helps users discover games with similar characteristics without requiring collaborative user-rating data.
-
-## Learning Outcomes
-
-- Implementing a content-based recommendation system.
-- Applying NLP techniques to structured game information.
-- Building a web application using FastAPI.
-- Integrating SQLite with SQLAlchemy.
-- Working with CSV datasets using Pandas.
-- Connecting recommendation logic with a user-facing web interface.
-
-## Future Improvements
-
-- Incorporate game genres, descriptions, and tags into recommendations.
-- Add advanced filtering by price, rating, and category.
-- Improve password security and session configuration.
-- Introduce user-preference-based recommendations.
-- Deploy the application to a cloud platform.
+- The app expects the dataset file at `dataset/games_1000.csv`.
+- The SQLite database is created locally by `database.py`.
+- For a real deployment, configure a secure session secret outside the source code and use secure password handling before exposing the app publicly.
 
 ## Author
 
-**Aaditi Apale**
-
+**Aaditi Apale**  
 GitHub: [@aaditi0227](https://github.com/aaditi0227)
-
----
-
-If you find this project useful, feel free to explore the repository and suggest improvements.
